@@ -2,119 +2,85 @@ from fastapi import FastAPI
 import uvicorn
 import numpy as np
 import cv2
-from demo import 
+import depthai
 
-# TODO: write your webcam capturing from here
-# COPY PASTE WEBCAM CODE HERE
+
 class CamCapture:
 
-    def __init__(self, source=0):
+    def __init__(self, save_path=str):
+        self.pipeline = depthai.Pipeline()
+        self.device = None
         self.img = None
-        self.grabbed = False
-        self.video_capture = None
-        self.read_thread = None
-        self.read_lock = threading.Lock()
-        self.running = False
-        self.camera_source = source
-
-    def open(self):
-        cameraID = self.camera_source
-        try:
-            self.video_capture = cv2.VideoCapture(cameraID)
-        except RuntimeError:
-            self.video_capture.release()
-            print("Unable to open camera")
-            return
-        # Grab the first frame to start the video capturing
-        self.grabbed, self.img = self.video_capture.read()
-        return True
-
+        self.save_path = save_path
     def start(self):
-        try:
-            if self.running:
-                print('Video capturing is already running')
-                return None
-                # create a thread to read the camera image
-            if self.video_capture is not None:
-                self.running = True
-                self.read_thread = threading.Thread(target=self._updateCamera, daemon=True)
-                self.read_thread.start()
-            return self
-        except Exception as e:
-            print(e)
-            return False
+        cam_rgb = self.pipeline.create(depthai.node.ColorCamera)
+        cam_rgb.setPreviewSize(640, 640)
+        cam_rgb.setInterleaved(False)
 
-    def read(self):
-        with self.read_lock:
-            img = self.img
-        return img
-
-    def _updateCamera(self):
-        # This is the thread to read images from the camera
-        while self.running:
-            try:
-                grabbed, img = self.video_capture.read()
-                with self.read_lock:
-                    self.grabbed = grabbed
-                    self.img = img
-            except RuntimeError:
-                print("Could not read image from camera")
-
+        #create output
+        xout_rgb = self.pipeline.create(depthai.node.XLinkOut)
+        xout_rgb.setStreamName("rgb")
+        cam_rgb.preview.link(xout_rgb.input)
+        
+        with depthai.Device(self.pipeline) as device:
+            self.device = device
+            q_rgb = device.getOutputQueue('rgb')
+            frame = None
+            while True:
+                in_rgb = q_rgb.tryGet()
+                if in_rgb is not None:
+                    frame = in_rgb.getCvFrame()
+                    self.img = frame
+                if frame is not None:
+                    cv2.imshow('Preview', frame)
+    
     def stop(self):
-        try:
-            self.running = False
-        except Exception as e:
-            print(e)
+        if self.device:
+            self.pipeline.stop()
+            self.device.close()
 
-    def release(self):
-        if self.video_capture is not None:
-            self.video_capture.release()
+
+    def capture(self):
+        if self.img:
+            cv2.imwrite(self.save_path, self.img)
+        else:
+            print("no streaming was found")
 
 
 
 class MainServer(CamCapture):
 
-    def __init__(self, server_model_path, server_cam_source=0):
+    def __init__(self, path=str):
         # self.model_path =server_model_path
         # self.camera_source = server_cam_source
-        self.inference_engine = ModelServer(model_path=server_model_path)
-        self.camera_engine = CamCapture(source=server_cam_source)
+        self.camera_engine = CamCapture(save_path=path)
 
     def start(self):
-        pass
-
-    def stop(self):
-        pass
-
-    def process(self):
-        self.camera_engine.open()
         self.camera_engine.start()
 
-        frame = self.camera_engine.read()
-        img = self.inference_engine.infer(image=frame)
-        pred, proto_mask = self.inference_engine.load_network()
-        preview_img = self.inference_engine.draw_segmentation(im0=frame, img=img, pred=pred, proto_mask=proto_mask)
-        return preview_img
+    def stop(self):
+        self.camera_engine.stop()
+
+    def capture(self):
+        self.camera_engine.capture()
 
 
 app = FastAPI()
-model_path = "H:\GITHUB\yolov5\yolov5s-seg.onnx"
+path = "H:\GITHUB"
 camera_source = 0
-main_machine = MainServer(server_model_path=model_path, server_cam_source=camera_source)
+main_machine = MainServer(path=path)
 
 
 @app.post("/start")
 async def start_inference():
     print('Start model inference')
     main_machine.start()
-    pass
 
 
 @app.post("/stop")
 async def stop_inference():
     print('Stop model inference')
     main_machine.stop()
-    pass
 
 
 def generate():
