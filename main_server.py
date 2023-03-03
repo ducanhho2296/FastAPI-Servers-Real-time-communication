@@ -8,6 +8,7 @@ from demo import
 # COPY PASTE WEBCAM CODE HERE
 class CamCapture:
 
+    def __init__(self, source=0):
     def open(self):
         cameraID = self.camera_source
         try:
