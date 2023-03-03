@@ -9,6 +9,7 @@ from demo import
 class CamCapture:
 
     def __init__(self, source=0):
+        self.img = None
     def open(self):
         cameraID = self.camera_source
         try:
