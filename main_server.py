@@ -11,6 +11,7 @@ class CamCapture:
     def __init__(self, source=0):
         self.img = None
         self.grabbed = False
+        self.video_capture = None
     def open(self):
         cameraID = self.camera_source
         try:
