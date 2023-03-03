@@ -5,6 +5,7 @@ import cv2
 from demo import 
 
 # TODO: write your webcam capturing from here
+# COPY PASTE WEBCAM CODE HERE
 
     def open(self):
         cameraID = self.camera_source
