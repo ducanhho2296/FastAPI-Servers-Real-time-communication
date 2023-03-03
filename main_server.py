@@ -15,6 +15,7 @@ class CamCapture:
         self.read_thread = None
         self.read_lock = threading.Lock()
         self.running = False
+        self.camera_source = source
     def open(self):
         cameraID = self.camera_source
         try:
