@@ -2,9 +2,36 @@ import cv2
 import asyncio
 import numpy as np
 from fastapi import FastAPI, WebSocket
-from starlette.responses import StreamingResponse
+from starlette.responses import HTMLResponse
 
 app = FastAPI()
+
+@app.get("/")
+async def read_root():
+    return HTMLResponse('''
+        <html>
+            <head>
+                <title>Video Streaming Test</title>
+            </head>
+            <body>
+                <h1>Video Streaming Test</h1>
+                <img src="#" id="video-feed" width="640" height="480" />
+                <script>
+                    var ws = new WebSocket('ws://' + window.location.host + '/ws');
+                    ws.binaryType = 'arraybuffer';
+                    ws.onmessage = function(event) {
+                        var img = document.getElementById('video-feed');
+                        var arrayBuffer = event.data;
+                        var byteArray = new Uint8Array(arrayBuffer);
+                        var blob = new Blob([byteArray], { type: 'image/jpeg' });
+                        var urlCreator = window.URL || window.webkitURL;
+                        var imageUrl = urlCreator.createObjectURL(blob);
+                        img.src = imageUrl;
+                    };
+                </script>
+            </body>
+        </html>
+    ''')
 
 async def video_feed(websocket: WebSocket):
     cap = cv2.VideoCapture(0)
@@ -19,7 +46,6 @@ async def video_feed(websocket: WebSocket):
 
             # Resize frame to reduce network bandwidth usage
             frame = cv2.resize(frame, (640, 480))
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             _, jpeg = cv2.imencode('.jpg', frame)
 
             # Send frame over WebSocket
@@ -31,32 +57,6 @@ async def video_feed(websocket: WebSocket):
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     await video_feed(websocket)
-
-@app.get("/")
-async def read_root():
-    return StreamingResponse(video_feed_generator(), media_type="multipart/x-mixed-replace; boundary=frame")
-
-def video_feed_generator():
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        raise RuntimeError("Could not start camera.")
-
-    try:
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
-
-            # Resize frame to reduce network bandwidth usage
-            frame = cv2.resize(frame, (640, 480))
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            _, jpeg = cv2.imencode('.jpg', frame)
-
-            # Yield frame to browser
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
-    finally:
-        cap.release()
 
 if __name__ == '__main__':
     import uvicorn
