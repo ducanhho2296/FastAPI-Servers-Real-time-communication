@@ -1,57 +1,41 @@
-from fastapi import FastAPI
-import uvicorn
 import cv2
+import uvicorn
+import numpy as np
+from fastapi import FastAPI, WebSocket
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from starlette.websockets import WebSocketDisconnect
 
 app = FastAPI()
-cap = cv2.VideoCapture(0)
 
-@app.post("/start")
-async def start_inference():
-    print('Start model inference')
- 
-    pass
+# Mount the "static" directory as a static file directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Define the HTML page served by the root URL
+@app.get("/")
+async def read_root():
+    with open("index.html") as f:
+        html = f.read()
+    return HTMLResponse(content=html, status_code=200)
 
-@app.post("/stop")
-async def stop_inference():
-    print('Stop model inference')
+# Define a WebSocket endpoint to stream video to the web browser
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    capture = cv2.VideoCapture(0)
+    while True:
+        ret, frame = capture.read()
+        if not ret:
+            break
+        try:
+            # Convert the frame to JPEG format
+            _, jpeg = cv2.imencode(".jpg", frame)
+            jpeg_bytes = jpeg.tobytes()
+            # Send the frame to the web browser
+            await websocket.send_bytes(jpeg_bytes)
+        except WebSocketDisconnect:
+            break
+    capture.release()
 
-
-
-def generate():
-    while True: # TODO: add logic to stop camera here
-        ret, image = cap.read()
-        if image is not None:
-            retval, image_encoded = cv2.imencode(".jpg", image)
-
-            if image_encoded is not None:
-                frame = image_encoded.tobytes()
-                yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-
-
-@app.get("/preview")
-async def get_images():
-    return StreamingResponse(generate(), media_type="multipart/x-mixed-replace;boundary=frame")
-
-
-from fastapi.responses import StreamingResponse
-from fastapi.middleware.cors import CORSMiddleware
 if __name__ == "__main__":
-    text = "OpenAPI Swagger link"
-    target = "http://127.0.0.1:8000/preview"  ## CLICK HERE
-    print(f"\u001b{text}\u001b\\{target}\u001b\u001b")
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
-    origins = ["*",
-                "http://localhost",
-                "http://localhost:8000",
-                ]
-
-    app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    )
