@@ -37,15 +37,6 @@ streaming = False
 
 
 def generate_frames():
-    if pipeline:
-        global device
-        with depthai.Device(pipeline) as device:
-            q_rgb = device.getOutputQueue("rgb")
-            frame = None  
-            while streaming:
-                in_rgb = q_rgb.tryGet()
-                if in_rgb is not None:
-                    frame = in_rgb.getCvFrame()
                 global img
                 img = frame.copy()
                 ret, buffer = cv2.imencode('.jpg', frame)
