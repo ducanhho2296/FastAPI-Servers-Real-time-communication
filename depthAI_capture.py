@@ -47,6 +47,7 @@ def generate_frames():
             in_rgb = q_rgb.tryGet()
             if in_rgb is not None:
                 frame = in_rgb.getCvFrame()
+            if frame is not None:
                 global img
                 img = frame.copy()
                 ret, buffer = cv2.imencode('.jpg', frame)
