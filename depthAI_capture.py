@@ -46,6 +46,7 @@ def generate_frames():
         while streaming:
             in_rgb = q_rgb.tryGet()
             if in_rgb is not None:
+                frame = in_rgb.getCvFrame()
                 global img
                 img = frame.copy()
                 ret, buffer = cv2.imencode('.jpg', frame)
