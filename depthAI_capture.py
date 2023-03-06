@@ -51,10 +51,10 @@ def generate_frames():
                 global img
                 img = frame.copy()
                 ret, buffer = cv2.imencode('.jpg', frame)
-                frame = buffer.tobytes()
+                frame_encoded = buffer.tobytes()
                 yield (b'--frame\r\n'
-                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-                # yield img
+                        b'Content-Type: image/jpeg\r\n\r\n' + frame_encoded + b'\r\n')
+            # yield img
 
 
 @app.get('/')
@@ -70,11 +70,10 @@ async def video_feed():
 
 @app.get('/stop_stream')
 async def stop_stream():
-    global streaming, pipeline
+    global streaming, device
     streaming = False
     if device:
         device.close()
-        global device
         device = None
     return {"message": "Streaming stopped successfully."}
 
