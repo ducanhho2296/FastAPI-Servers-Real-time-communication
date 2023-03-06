@@ -43,6 +43,7 @@ def generate_frames():
     with depthai.Device(pipeline) as device:
         q_rgb = device.getOutputQueue("rgb")
         frame = None  
+        while streaming:
                 global img
                 img = frame.copy()
                 ret, buffer = cv2.imencode('.jpg', frame)
