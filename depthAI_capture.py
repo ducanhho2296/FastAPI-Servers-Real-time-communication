@@ -37,6 +37,7 @@ streaming = False
 
 
 def generate_frames():
+    # if pipeline:
                 global img
                 img = frame.copy()
                 ret, buffer = cv2.imencode('.jpg', frame)
