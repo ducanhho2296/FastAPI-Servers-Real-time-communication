@@ -40,6 +40,7 @@ def generate_frames():
     # if pipeline:
     streaming = True
     global device
+    with depthai.Device(pipeline) as device:
                 global img
                 img = frame.copy()
                 ret, buffer = cv2.imencode('.jpg', frame)
