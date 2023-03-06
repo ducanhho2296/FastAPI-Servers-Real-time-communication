@@ -66,7 +66,8 @@ async def index():
 async def video_feed():
     global streaming
     streaming = True
-    return StreamingResponse(generate_frames(), media_type='multipart/x-mixed-replace; boundary=frame')
+    return StreamingResponse(generate_frames(), 
+                             media_type='multipart/x-mixed-replace; boundary=frame')
 
 @app.get('/stop_stream')
 async def stop_stream():
