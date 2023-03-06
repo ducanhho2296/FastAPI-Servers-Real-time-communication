@@ -44,6 +44,7 @@ def generate_frames():
         q_rgb = device.getOutputQueue("rgb")
         frame = None  
         while streaming:
+            in_rgb = q_rgb.tryGet()
                 global img
                 img = frame.copy()
                 ret, buffer = cv2.imencode('.jpg', frame)
