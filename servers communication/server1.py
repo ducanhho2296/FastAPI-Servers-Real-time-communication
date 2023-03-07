@@ -7,7 +7,6 @@ app = FastAPI()
 # Define the database connection settings
 DATABASE_URL = "postgres://user:password@localhost:5432/mydatabase"
 
-async def call_server2():
     response = requests.get("http://localhost:8001/")
     return {"message":response.json()["message"]}
 
