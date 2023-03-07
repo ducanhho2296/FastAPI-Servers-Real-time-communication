@@ -10,6 +10,7 @@ DATABASE_URL = "postgres://user:password@localhost:5432/mydatabase"
 # Define the database models
 class MyModel(tortoise.models.Model):
     id = fields.IntField(pk=True)
+    name = fields.CharField(max_length=255)
 
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=8000)
