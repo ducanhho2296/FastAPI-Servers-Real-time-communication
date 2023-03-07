@@ -4,7 +4,6 @@ from tortoise import fields
 import tortoise
 app = FastAPI()
 
-    return {"message": "This is server 1"}
 
 @app.get('/call_server2')
 async def call_server2():
