@@ -5,6 +5,7 @@ import tortoise
 app = FastAPI()
 
 # Define the database connection settings
+DATABASE_URL = "postgres://user:password@localhost:5432/mydatabase"
 
 @app.get('/call_server2')
 async def call_server2():
