@@ -13,4 +13,5 @@ class MyModel(tortoise.models.Model):
     name = fields.CharField(max_length=255)
 
     class Meta:
+        table = "mytable"
 
