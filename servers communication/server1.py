@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
 from tortoise import fields
+import tortoise
 app = FastAPI()
 
 @app.get('/')
