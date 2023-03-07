@@ -4,6 +4,7 @@ from tortoise import fields
 import tortoise
 app = FastAPI()
 
+# Define the database connection settings
 
 @app.get('/call_server2')
 async def call_server2():
