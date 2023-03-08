@@ -6,10 +6,13 @@ async def fetch_file(file_name: str):
         async with session.post("http://server-a-ip:port/get_file/", data={"file_name": file_name}) as response:
             return await response.json()
 
-@app.get('/call_server2')
-async def call_server2():
-    response = requests.get("http://localhost:8000/")
-    return {"message":response.json()["message"]}
+async def main():
+    file_contents = await fetch_file("example.txt")
+    if file_contents["file"]:
+        with open("example.txt", "wb") as f:
+            f.write(file_contents["file"])
+            print("File saved.")
+    else:
+        print("File not found.")
 
-if __name__ == '__main__':
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+asyncio.run(main())
