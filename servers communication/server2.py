@@ -3,6 +3,7 @@ import aiohttp
 
 async def fetch_file(file_name: str):
     async with aiohttp.ClientSession() as session:
+        async with session.post("http://server-a-ip:port/get_file/", data={"file_name": file_name}) as response:
 
 @app.get('/call_server2')
 async def call_server2():
