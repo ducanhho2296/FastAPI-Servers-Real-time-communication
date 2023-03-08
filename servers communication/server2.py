@@ -1,6 +1,7 @@
 import asyncio
 import aiohttp
 
+async def fetch_file(file_name: str):
 
 @app.get('/call_server2')
 async def call_server2():
