@@ -18,7 +18,6 @@ xout_rgb = pipeline.create(depthai.node.XLinkOut)
 xout_rgb.setStreamName("rgb")
 cam_rgb.preview.link(xout_rgb.input)
 
-# with depthai.Device(pipeline) as device:
 #     q_rgb = device.getOutputQueue("rgb")
 #     frame = None   
 #     while True:
