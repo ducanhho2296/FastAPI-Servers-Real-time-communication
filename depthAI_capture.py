@@ -18,7 +18,6 @@ xout_rgb = pipeline.create(depthai.node.XLinkOut)
 xout_rgb.setStreamName("rgb")
 cam_rgb.preview.link(xout_rgb.input)
 
-#             if cv2.waitKey(1) == ord('q'):
 #                 break
 app = FastAPI()
 streaming = False
