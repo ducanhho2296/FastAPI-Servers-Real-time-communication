@@ -7,6 +7,7 @@ app = FastAPI()
 
 @app.get('/')
 async def root():
+    return {"message":"this is the server1"}
 
 @app.post("/get_file/")
 async def get_file(file_name: str):
