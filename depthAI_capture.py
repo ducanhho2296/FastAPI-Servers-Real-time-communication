@@ -18,7 +18,6 @@ xout_rgb = pipeline.create(depthai.node.XLinkOut)
 xout_rgb.setStreamName("rgb")
 cam_rgb.preview.link(xout_rgb.input)
 
-#             frame = in_rgb.getCvFrame()
         
 #         if frame is not None:
 #             cv2.imshow("preview", frame)
