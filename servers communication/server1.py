@@ -1,4 +1,3 @@
-import os
 import asyncio
 from fastapi import FastAPI, File, UploadFile
 
