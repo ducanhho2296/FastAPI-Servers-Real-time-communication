@@ -5,7 +5,6 @@ import requests
 # Create server1
 app1 = FastAPI()
 
-@app.get('/')
 async def root():
     return {"message":"this is the server1"}
 
