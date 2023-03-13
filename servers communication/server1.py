@@ -3,6 +3,7 @@ from fastapi import FastAPI
 import requests
 
 # Create server1
+app1 = FastAPI()
 
 @app.get('/')
 async def root():
