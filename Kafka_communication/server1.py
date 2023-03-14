@@ -11,3 +11,4 @@ consumer = Consumer({
     'auto.offset.reset': 'earliest'
 })
 consumer.subscribe(['response-topic'])
+
