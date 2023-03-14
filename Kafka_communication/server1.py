@@ -10,3 +10,4 @@ consumer = Consumer({
     'group.id': 'my-group',
     'auto.offset.reset': 'earliest'
 })
+consumer.subscribe(['response-topic'])
