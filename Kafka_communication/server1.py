@@ -6,3 +6,4 @@ app = FastAPI()
 # Set up Kafka producer and consumer
 producer = Producer({'bootstrap.servers': 'kafka-broker-a:9092,kafka-broker-b:9092'})
 consumer = Consumer({
+    'bootstrap.servers': 'kafka-broker-a:9092,kafka-broker-b:9092',
