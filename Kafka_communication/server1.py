@@ -13,3 +13,4 @@ consumer = Consumer({
 consumer.subscribe(['response-topic'])
 
 @app.post('/send-request')
+async def send_request(request: dict):
