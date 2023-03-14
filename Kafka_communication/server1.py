@@ -18,3 +18,4 @@ async def send_request(request: dict):
     producer.produce('request-topic', value=request)
 
     # Wait for a response from Server B
+    msg = consumer.poll(10.0)
