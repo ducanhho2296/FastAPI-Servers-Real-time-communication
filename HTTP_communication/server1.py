@@ -1,13 +1,13 @@
-import os
-import asyncio
-from fastapi import FastAPI, File, UploadFile
 
-app = FastAPI()
+from fastapi import FastAPI
+import requests
 
+# Create server1
+app1 = FastAPI()
 
-@app.get('/')
+@app1.get("/")
 async def root():
-    return {"ok welcome on boards": "brooo"}
+    return {"message":"this is the server1"}
 
 @app.post("/get_file/")
 async def get_file(file_name: str):
