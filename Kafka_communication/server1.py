@@ -12,3 +12,4 @@ consumer = Consumer({
 })
 consumer.subscribe(['response-topic'])
 
+@app.post('/send-request')
