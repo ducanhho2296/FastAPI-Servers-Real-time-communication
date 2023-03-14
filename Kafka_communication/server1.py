@@ -17,3 +17,4 @@ async def send_request(request: dict):
     # Send the request as a message to the Kafka topic
     producer.produce('request-topic', value=request)
 
+    # Wait for a response from Server B
