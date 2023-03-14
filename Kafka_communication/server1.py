@@ -14,3 +14,4 @@ consumer.subscribe(['response-topic'])
 
 @app.post('/send-request')
 async def send_request(request: dict):
+    # Send the request as a message to the Kafka topic
