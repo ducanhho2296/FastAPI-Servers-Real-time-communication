@@ -7,3 +7,4 @@ app = FastAPI()
 producer = Producer({'bootstrap.servers': 'kafka-broker-a:9092,kafka-broker-b:9092'})
 consumer = Consumer({
     'bootstrap.servers': 'kafka-broker-a:9092,kafka-broker-b:9092',
+    'group.id': 'my-group',
