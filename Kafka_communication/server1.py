@@ -19,3 +19,12 @@ async def send_request(request: dict):
 
     # Wait for a response from Server B
     msg = consumer.poll(10.0)
+
+    if msg is None:
+        return {'error': 'Request timed out'}
+
+    if msg.error():
+        return {'error': str(msg.error())}
+
+    # Return the response to the client
+    return {'response': msg.value().decode('utf-8')}
