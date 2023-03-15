@@ -6,6 +6,7 @@ app = FastAPI()
 
 producer = KafkaProducer(
     bootstrap_servers=["your_server"],
+    sasl_plain_username='username',
 
 @app.post('/send-request')
 async def send_request(request: dict):
