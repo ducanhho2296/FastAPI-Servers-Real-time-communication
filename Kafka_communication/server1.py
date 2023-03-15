@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
+producer = KafkaProducer(
 
 @app.post('/send-request')
 async def send_request(request: dict):
