@@ -1,7 +1,6 @@
 import json
 from kafka import KafkaProducer
 from fastapi import FastAPI
-from confluent_kafka import Producer, Consumer
 
 app = FastAPI()
 
