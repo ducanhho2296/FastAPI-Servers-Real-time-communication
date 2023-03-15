@@ -8,6 +8,7 @@ producer = KafkaProducer(
     bootstrap_servers=["your_server"],
     sasl_plain_username='username',
     sasl_plain_password='password',
+    sasl_mechanism='mechanism',
 
 @app.post('/send-request')
 async def send_request(request: dict):
