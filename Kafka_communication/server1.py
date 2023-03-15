@@ -13,15 +13,19 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
-async def send_request(request: dict):
-    # Send the request as a message to the Kafka topic
-    producer.produce('request-topic', value=request)
+@app.post("/send_message")
+async def send_message(message: str):
+    producer.send('fastapi_topic', {'message': message})
+    return {"status": "Message sent"}
 
-    # Wait for a response from Server B
-    msg = consumer.poll(10.0)
 
-    if msg is None:
-        return {'error': 'Request timed out'}
+@app.get("/repeatly_request")
+def repeat_request():
+    count = 0
+    while count <= 10:
+        producer.send("fastapi_topic", {'message':count})
+        print("The count message {} was sent".format(count))
+        count += 1
 
     if msg.error():
         return {'error': str(msg.error())}
