@@ -5,6 +5,7 @@ from fastapi import FastAPI
 app = FastAPI()
 
 producer = KafkaProducer(
+    bootstrap_servers=["your_server"],
 
 @app.post('/send-request')
 async def send_request(request: dict):
