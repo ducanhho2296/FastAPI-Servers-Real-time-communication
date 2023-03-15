@@ -27,8 +27,9 @@ def repeat_request():
         print("The count message {} was sent".format(count))
         count += 1
 
-    if msg.error():
-        return {'error': str(msg.error())}
+    return {"message":"Messages was sent to server2"}
+    
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8001)
 
-    # Return the response to the client
-    return {'response': msg.value().decode('utf-8')}
