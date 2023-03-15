@@ -10,6 +10,7 @@ producer = KafkaProducer(
     sasl_plain_password='password',
     sasl_mechanism='mechanism',
     security_protocol='SASL_PLAINTEXT',
+    value_serializer=lambda v: json.dumps(v).encode('utf-8')
 
 @app.post('/send-request')
 async def send_request(request: dict):
