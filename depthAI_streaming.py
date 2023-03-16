@@ -78,6 +78,7 @@ async def save_frame(filename: str):
     file_path = os.path.join("your_path", filename)
 
     # Save the image to the specified file path
+    cv2.imwrite(file_path, img)
 ####demo using @app.post to receive request from client(web browser)
 @app.post('/demo')
 async def demo_getvalue(value:str):
