@@ -70,6 +70,7 @@ async def restart_stream():
     streaming = True
     return {"message": "Streaming restarted successfully."}
 
+import os
 @app.get('/save_frame')
 async def save_frame(filename:str):
     cv2.imwrite(filename, img)
