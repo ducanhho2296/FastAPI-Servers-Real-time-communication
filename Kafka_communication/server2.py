@@ -1,42 +1,38 @@
-from confluent_kafka import Producer, Consumer
 import json
+from kafka import KafkaConsumer
+from fastapi import FastAPI
+
+app = FastAPI()
+
+consumer = KafkaConsumer(
+    'fastapi_topic',
+    bootstrap_servers=["your_server"],
+    sasl_plain_username='username',
+    sasl_plain_password='password',
+    sasl_mechanism='mechanism',
+    security_protocol='SASL_PLAINTEXT',
+    value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+)
+
+def process_message(message):
+    print(f"Received message: {message}")
+
+# def kafka_consumer():
+#     for message in consumer:
+#         process_message(message.value)
+#         messages.append(message.value)
 
 
-# Set up Kafka producer and consumer
-producer = Producer({'bootstrap.servers': 'kafka-broker-a:9092,kafka-broker-b:9092'})
-consumer = Consumer({
-    'bootstrap.servers': 'kafka-broker-a:9092,kafka-broker-b:9092',
-    'group.id': 'my-group',
-    'auto.offset.reset': 'earliest'
-})
-consumer.subscribe(['request-topic'])
 
-def process_request(request):
-    # Parse the request message
-    data = json.loads(request)
+# @app.get("/")
+# async def kafka_consumer():
+#     for message in consumer:
+#         process_message(message.value)
+#         return {"message:": message.value}
 
-    # Process the request
-    # ...
-    # Perform the necessary processing here, and generate a response message
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="0.0.0.0", port=8000)
+for message in consumer:
+    process_message(message.value)
 
-    response = {'message': 'Hello from Server B'}
-
-    # Return the response message
-    return json.dumps(response)
-
-while True:
-    msg = consumer.poll(1.0)
-
-    if msg is None:
-        continue
-
-    if msg.error():
-        print(f'Error: {msg.error()}')
-        continue
-
-    # Process the request
-    request = msg.value().decode('utf-8')
-    response = process_request(request)
-
-    # Send the response as a message to the Kafka topic
-    producer.produce('response-topic', value=response.encode('utf-8'))
