@@ -72,7 +72,6 @@ async def restart_stream():
 
 import os
 @app.get('/save_frame')
-    cv2.imwrite(filename, img)
 
 
 ####demo using @app.post to receive request from client(web browser)
