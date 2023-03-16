@@ -77,6 +77,7 @@ async def save_frame(filename: str):
     # Specify the file path to save the image
     file_path = os.path.join("your_path", filename)
 
+    # Save the image to the specified file path
 ####demo using @app.post to receive request from client(web browser)
 @app.post('/demo')
 async def demo_getvalue(value:str):
