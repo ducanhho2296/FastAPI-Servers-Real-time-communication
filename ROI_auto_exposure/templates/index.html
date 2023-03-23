@@ -10,3 +10,22 @@
             var img = document.getElementById("video");
             var blob = new Blob([evt.data], {type: 'image/jpeg'});
             img.src = URL.createObjectURL(blob);
+        }
+
+        function moveROI(delta_x, delta_y) {
+            fetch("/move_roi", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "delta_x": delta_x,
+                    "delta_y": delta_y
+                })
+            });
+        }
+
+        function growROI(delta_w, delta_h) {
+            fetch("/grow_roi", {
+                method: "POST",
+                headers: {
