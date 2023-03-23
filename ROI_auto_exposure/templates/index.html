@@ -1,1 +1,12 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Streaming with Dynamic ROI</title>
+    <script>
+        var ws = new WebSocket("ws://" + window.location.host + "/ws");
+        ws.binaryType = 'arraybuffer';
+
+        ws.onmessage = function(evt) {
+            var img = document.getElementById("video");
+            var blob = new Blob([evt.data], {type: 'image/jpeg'});
+            img.src = URL.createObjectURL(blob);
