@@ -30,3 +30,25 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "delta_w": delta_w,
+                    "delta_h": delta_h
+                })
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Camera Streaming with Dynamic ROI</h1>
+    <img id="video" width="640" height="480" /><br />
+    <button onclick="moveROI(-10, 0)">Move Left</button>
+    <button onclick="moveROI(10, 0)">Move Right</button>
+    <button onclick="moveROI(0, -10)">Move Up</button>
+    <button onclick="moveROI(0, 10)">Move Down</button>
+    <button onclick="growROI(-10, 0)">Shrink Width</button>
+    <button onclick="growROI(10, 0)">Grow Width</button>
+    <button onclick="growROI(0, -10)">Shrink Height</button>
+    <button onclick="growROI(0, 10)">Grow Height</button>
+</body>
+</html>
