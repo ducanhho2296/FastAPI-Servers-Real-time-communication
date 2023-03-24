@@ -20,3 +20,4 @@ class AutoExposureRegion:
 
     def grow(self, x=0, y=0):
         self.size = (
+            clamp(x + self.size[0], 1, self.maxDims[0]),
