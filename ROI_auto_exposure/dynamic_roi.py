@@ -19,3 +19,4 @@ class AutoExposureRegion:
         self.maxDims = maxDims
 
     def grow(self, x=0, y=0):
+        self.size = (
