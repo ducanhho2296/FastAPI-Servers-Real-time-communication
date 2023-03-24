@@ -17,3 +17,4 @@ class AutoExposureRegion:
         self.position = position
         self.size = size
         self.maxDims = maxDims
+
