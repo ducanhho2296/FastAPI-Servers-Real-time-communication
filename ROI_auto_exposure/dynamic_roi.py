@@ -22,3 +22,4 @@ class AutoExposureRegion:
         self.size = (
             clamp(x + self.size[0], 1, self.maxDims[0]),
             clamp(y + self.size[1], 1, self.maxDims[1])
+        )
