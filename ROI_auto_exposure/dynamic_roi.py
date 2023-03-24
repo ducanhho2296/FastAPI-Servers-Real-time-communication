@@ -12,3 +12,5 @@ cap = cv2.VideoCapture(0)
 if not cap.isOpened():
     raise IOError("Cannot open webcam")
 
+class AutoExposureRegion:
+    def __init__(self, position=(0, 0), size=(100, 100), maxDims=(640, 480)):
