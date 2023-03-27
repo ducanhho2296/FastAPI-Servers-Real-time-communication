@@ -30,3 +30,4 @@ class AutoExposureRegion:
             clamp(y + self.position[1], 0, self.maxDims[1] - self.size[1])
         )
 
+    def endPosition(self):
