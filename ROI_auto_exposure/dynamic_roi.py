@@ -31,3 +31,4 @@ class AutoExposureRegion:
         )
 
     def endPosition(self):
+        return (
