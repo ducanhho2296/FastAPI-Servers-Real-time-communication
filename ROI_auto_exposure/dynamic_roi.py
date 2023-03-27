@@ -37,3 +37,4 @@ class AutoExposureRegion:
         )
 
     def toRoi(self):
+        roi = np.array([*self.position, *self.size])
