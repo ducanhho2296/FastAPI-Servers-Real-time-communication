@@ -28,3 +28,4 @@ class AutoExposureRegion:
         self.position = (
             clamp(x + self.position[0], 0, self.maxDims[0] - self.size[0]),
             clamp(y + self.position[1], 0, self.maxDims[1] - self.size[1])
+        )
