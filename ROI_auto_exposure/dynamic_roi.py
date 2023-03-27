@@ -24,3 +24,4 @@ class AutoExposureRegion:
             clamp(y + self.size[1], 1, self.maxDims[1])
         )
 
+    def move(self, x=0, y=0):
