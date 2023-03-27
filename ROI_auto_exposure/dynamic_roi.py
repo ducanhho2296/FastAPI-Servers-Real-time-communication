@@ -36,3 +36,4 @@ class AutoExposureRegion:
             self.position[1] + self.size[1]
         )
 
+    def toRoi(self):
