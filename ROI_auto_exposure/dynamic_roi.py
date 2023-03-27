@@ -34,3 +34,4 @@ class AutoExposureRegion:
         return (
             self.position[0] + self.size[0],
             self.position[1] + self.size[1]
+        )
