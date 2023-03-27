@@ -25,3 +25,4 @@ class AutoExposureRegion:
         )
 
     def move(self, x=0, y=0):
+        self.position = (
