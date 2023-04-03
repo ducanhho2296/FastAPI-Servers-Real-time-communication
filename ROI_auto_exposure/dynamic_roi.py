@@ -39,3 +39,46 @@ class AutoExposureRegion:
     def toRoi(self):
         roi = np.array([*self.position, *self.size])
         return roi
+
+region = AutoExposureRegion()
+
+async def video_feed(websocket):
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        roi = region.toRoi()
+        cv2.rectangle(frame, roi.position, roi.endPosition(), (0, 255, 0), 2)
+
+        # roi_frame = frame[roi[1]:roi[3], roi[0]:roi[2]]
+        jpeg_roi = cv2.imencode('.jpg', frame)[1].tobytes()
+        await websocket.send_bytes(jpeg_roi)
+        await asyncio.sleep(0)
+
+@app.get("/")
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    await video_feed(websocket)
+
+@app.post("/move_roi")
+async def move_roi(delta_x: int, delta_y: int):
+    region.move(delta_x, delta_y)
+    return {"message": "ROI moved successfully"}
+
+@app.post("/grow_roi")
+async def grow_roi(delta_w: int, delta_h: int):
+    region.grow(delta_w, delta_h)
+    return {"message": "ROI grown successfully"}
+
+def clamp(n, minn, maxn):
+    return max(min(maxn, n), minn)
+
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
